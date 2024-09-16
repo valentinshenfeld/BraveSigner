@@ -2,18 +2,14 @@ package main
 
 import (
 	"BraveSigner/cmd"
-	"BraveSigner/cmd/keys"
-	"BraveSigner/cmd/signatures"
 	"BraveSigner/logger"
+	"errors"
 )
 
 func main() {
+
 	rootCmd := cmd.RootCmd()
-	keys.Init(rootCmd)
-	signatures.Init(rootCmd)
-
 	if err := rootCmd.Execute(); err != nil {
-		logger.HaltOnErr(err, "Initial setup failed")
+		logger.HaltOnErr(errors.New("cannot proceed, exiting now"), "Initial setup failed")
 	}
-
 }

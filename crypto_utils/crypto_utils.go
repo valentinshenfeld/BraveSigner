@@ -12,6 +12,10 @@ import (
 type KeyDerivationConfig struct {
 	Passphrase []byte
 	Salt       []byte
+	Time       uint32
+	Memory     uint32
+	Threads    uint8
+	KeyLen     uint32
 }
 
 // MakeNonce creates a nonce suitable for use with the provided AEAD cipher.

@@ -1,0 +1,6 @@
+*.pem
+*.sig
+example.txt
+dist/
+*.exe
+config.yaml
