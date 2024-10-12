@@ -1,0 +1,61 @@
+version: 1.1
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - windows
+      - linux
+      - freebsd
+      - js
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+      - wasm
+    goarm:
+      - 6
+      - 7
+    ldflags:
+      - "-s -w -X 'brave_signer/cmd.version={{.Version}}'"
+
+upx:
+  - # Whether to enable it or not.
+    #
+    # Templates: allowed.
+    enabled: true
+    compress: best
+    lzma: true
+    brute: true
+    goos: [linux, darwin, windows]
+
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+    # Exclude wasm from archiving, as it does not require a standard binary archive
+    # exclude:
+    #   - js/wasm
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
